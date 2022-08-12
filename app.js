@@ -1,8 +1,12 @@
-let canvasColor = 'pink';
-let brushColor = 'purple';
+// https://www.pantone.com/articles/past-colors-of-the-year
+const colorMap = {2022: '#6667AB', 2021: '#939597', 2020: '#0f4c81',
+2019: '#ff6f61', 2018: '#5f4b8b', 2017: '#88b04b', 2016: '#f7caca',
+2015: '#955251', 2014: '#ad5e99'}
+
+let canvasColor = colorMap[2016];
+let brushColor = colorMap[2018];
 let pausing = false;
 let erasing = false;
-/* const colorMap = {'2022': '#6667AB', '2021': } */
 
 const container = document.querySelector('#container');
 container.classList.add('colFlex');
@@ -12,7 +16,6 @@ const canvas = document.createElement('div');
 container.appendChild(canvas);
 canvas.id = 'canvas';
 canvas.classList.add('colFlex');
-canvas.style.margin = '20px';
 
 for (let i = 0; i < 32; i++) {
     const theRow = document.createElement('div');
@@ -26,6 +29,101 @@ for (let i = 0; i < 32; i++) {
         theBox.addEventListener('mouseover', coloring);
     }
 }
+
+// colors
+const colors = document.createElement('div');
+container.appendChild(colors);
+colors.id = 'colors';
+colors.classList.add('colFlex');
+colors.style.marginTop = 0;
+
+const canvasPicker = document.createElement('div');
+colors.appendChild(canvasPicker);
+canvasPicker.id = 'canvasPicker'
+canvasPicker.classList.add('colorPicker');
+
+const brushPicker = document.createElement('div');
+colors.appendChild(brushPicker);
+brushPicker.id = 'brushPicker'
+brushPicker.classList.add('colorPicker');
+brushPicker.style.marginLeft = "10%";
+
+
+const canvasText = document.createElement('div');
+canvasPicker.appendChild(canvasText);
+canvasText.id = "canvasText";
+canvasText.textContent = "canvas";
+canvasText.style.lineHeight = "25px";
+
+const brushText = document.createElement('div');
+brushText.id = "brushText";
+brushText.textContent = "brush";
+brushText.style.lineHeight = "25px";
+brushPicker.appendChild(brushText);
+
+
+const colorYears = Object.keys(colorMap);
+colorYears.forEach(year => {
+    theBox = document.createElement('div');
+    theBox.classList.add('colorBox');
+    theColor = colorMap[year];
+    theBox.style.backgroundColor = theColor;
+    theBox.style.color = 'white';
+    theBox.textContent = year;
+    const theBoxCopy = theBox.cloneNode(true);
+
+    canvasPicker.appendChild(theBox);
+    brushPicker.appendChild(theBoxCopy);
+    theBox.classList.add('canvasBox');
+    theBoxCopy.classList.add('brushBox');
+    
+
+    if (theColor == canvasColor) {
+        theBox.style.color = theColor;
+        theBox.classList.add('selected');
+    }
+
+    theBox.addEventListener('click', (event) => {
+        const theHex = colorMap[event.target.textContent];
+
+        const canvasBoxes = document.querySelectorAll('.canvasBox');
+        canvasBoxes.forEach(x => {
+            if (x.classList.contains('selected')) {
+                x.classList.remove('selected');
+                x.style.color = 'white';
+            }
+            if (x == event.target) {
+                x.classList.add('selected');
+                x.style.color = theHex;
+            }
+        })
+        setCanvasColor(theHex);
+    })
+
+    if (theColor == brushColor) {
+        theBoxCopy.style.color = theColor;
+        theBoxCopy.classList.add('selected');
+    }
+
+    theBoxCopy.addEventListener('click', (event) => {
+        const theHex = colorMap[event.target.textContent];
+
+        const brushBoxes = document.querySelectorAll('.brushBox');
+        brushBoxes.forEach(x => {
+            if (x.classList.contains('selected')) {
+                x.classList.remove('selected');
+                x.style.color = 'white';
+            }
+            if (x == event.target) {
+                x.classList.add('selected');
+                x.style.color = theHex;
+            }
+        })
+        setBrushColor(theHex);
+    })
+})
+
+
 
 // buttons
 const buttons = document.createElement('div');
@@ -124,13 +222,15 @@ function reverseErase() {
 }
 
 function setCanvasColor(newColor) {
+    console.log("Change the canvas color to " + newColor);
+
     const boxes = document.querySelectorAll('.box');
     boxes.forEach(x => {
         if (!x.classList.contains('selected')) {
             x.style.backgroundColor = newColor;
         }
     })
-    console.log("Change the canvas color to " + newColor);
+
     canvasColor = newColor;
     resetButton.style.backgroundColor = canvasColor;
     if (!pausing) {

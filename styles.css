@@ -1,22 +1,20 @@
+html {
+    font-size: 15px;
+    font-weight: bold;
+    font-family: Arial;
+}
 .colFlex {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .rowFlex {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 10px;
-}
-
-.row {
-    flex: auto; 
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    margin-top: 15px;
 }
 
 .box {
@@ -26,6 +24,34 @@
     border-radius: 3px;
     /* border: 3px solid darkmagenta; */
     margin: 2.5px;
+}
+
+.row {
+    flex: auto; 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.colorPicker {
+    flex: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.colorBox {
+    flex: auto;
+    font-size: 15px;
+    font-weight: bold;
+    height: 25px;
+    line-height: 25px;
+    width: 40px;
+    border-radius: 3px;
+    text-align: center;
+    align-items: center;
 }
 
 button {
