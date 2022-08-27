@@ -32,6 +32,6 @@ class App extends Component {
         <p className="App-intro">;{this.state.apiResponse}</p>
       </div>
     )
-  }*/ß
+  }*/
 }
 export default App;
