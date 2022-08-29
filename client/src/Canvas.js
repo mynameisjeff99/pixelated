@@ -25,7 +25,6 @@ class Canvas extends Component {
 
     return (
       <div id='container' className='colFlex'>
-        <h1>{title}</h1>
         <div id='canvas' className='colFlex'>
           {all_items}
         </div>
