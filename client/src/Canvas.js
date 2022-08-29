@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 
+const colorMap = {2022: '#6667AB', 2021: '#939597', 2020: '#0f4c81',
+2019: '#ff6f61', 2018: '#5f4b8b', 2017: '#88b04b', 2016: '#f7caca',
+2015: '#955251', 2014: '#ad5e99'}
+
 class Canvas extends Component {
   constructor(props) {
     super(props);
