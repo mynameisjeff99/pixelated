@@ -52,12 +52,12 @@
 }
 
 .canvasBox {
-  flex: auto;
-  height: 15px;
-  width: 15px;
-  border-radius: 3px;
-  border: 3px solid darkmagenta;
-  margin: 2.5px;
+  flex: auto !important;
+  height: 30px !important;
+  width: 30px !important;
+  border-radius: 3px !important;
+  border: 3px solid darkmagenta !important;
+  margin: 2.5px !important;
 }
 
 .row {
