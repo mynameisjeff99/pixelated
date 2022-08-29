@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 
-const colorMap = {2022: '#6667AB', 2021: '#939597', 2020: '#0f4c81',
-2019: '#ff6f61', 2018: '#5f4b8b', 2017: '#88b04b', 2016: '#f7caca',
-2015: '#955251', 2014: '#ad5e99'}
-
 class Canvas extends Component {
   constructor(props) {
     super(props);
-    this.changeBackground = this.changeBackground.bind(this);
+    this.state = {
+      colorMap: {2022: '#6667AB', 2021: '#939597', 2020: '#0f4c81',
+        2019: '#ff6f61', 2018: '#5f4b8b', 2017: '#88b04b', 2016: '#f7caca',
+        2015: '#955251', 2014: '#ad5e99'},
+      canvasColor: "#f7caca", 
+      brushColor: "#5f4b8b"};
+    //this.changeCanvasColor = this.changeCanvasColor.bind(this);
+    this.changeBrushColor = this.changeBrushColor.bind(this);
   }
 
-  changeBackground(e) {
-    e.target.style.background = 'red';
+  changeBrushColor(e) {
+    e.target.style.background = this.state.brushColor;
   }
 
   render() {
@@ -21,7 +24,7 @@ class Canvas extends Component {
       let items = []
       for (let j = 0; j < 16; j++) {
         let id= i.toString()+'_'+j.toString()
-        items.push(<div onMouseOver={this.changeBackground} 
+        items.push(<div onMouseOver={this.changeBrushColor} style={{backgroundColor: this.state.canvasColor}}
           id={id} key={j} className='canvasBox'/>)
       }
       all_items.push(<div key={i} className='canvasRow row'> {items} </div>);
