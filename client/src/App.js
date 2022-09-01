@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Canvas} from './Canvas';
+import {Canvas} from './components/Canvas';
 import './App.css';
 
 class App extends Component {

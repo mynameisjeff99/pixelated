@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
-import {LogIn, SignUp} from "./User";
+import {LogIn, SignUp} from "./components/User";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "./Navigation";
+import Navbar from "./components/Navigation";
 
 
 const RouteSwitch = () => {
