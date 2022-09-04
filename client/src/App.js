@@ -1,37 +1,12 @@
-import React, { Component } from 'react';
-import {Canvas} from './components/Canvas';
 import './App.css';
+import Canvas from './components/Canvas';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    //this.state = { apiResponse: ''};
-  }
+const App = () => {
+  return (
+    <div>
+      <Canvas/>
+    </div>
+  )
+};
 
-  render() {
-    return (
-      <div>
-        <Canvas/>
-      </div>
-    )
-  }
-
-  /*callAPI() {
-    fetch("http://localhost:9000/testAPI")
-      .then(res => res.text())
-      .then(res => this.setState({apiResponse: res}));
-  }
-
-  componentDidMount() {
-    this.callAPI();
-  }
-
-  render() {
-    return (
-      <div>
-        <p className="App-intro">;{this.state.apiResponse}</p>
-      </div>
-    )
-  }*/
-}
 export default App;
