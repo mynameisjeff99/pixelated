@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-const NavBar = () => {
+const NavBar = props => {
   return (
     <Navbar>
       <Container>
@@ -20,6 +20,11 @@ const NavBar = () => {
               <NavDropdown.Divider />
               <NavDropdown.Item href="#not-implemented">Learn More</NavDropdown.Item>
             </NavDropdown>
+            <Navbar.Collapse className="justify-content-right">
+              <Navbar.Text>
+                Signed in as: {props.user? props.user.local.username: "Not logged In Yet"}
+              </Navbar.Text>
+            </Navbar.Collapse>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -19,25 +19,15 @@ class Login extends Component {
       [event.target.name]: event.target.value
     })
   };
+  
 
   handleSubmit(event) {
     event.preventDefault()
     console.log('handleSubmit')
-    axios.post(`${process.env.REACT_APP_API_URI}auth/login`, {
-      username: this.state.username,
-      password: this.state.password
-    }).then(response => {
-      console.log(response)
-      if (response.status === 200) {
-        // update the state
-        this.setState({
-          redirectTo: '/'
-        })
-      } else {
-        console.log('Sign up failed')
-        alert('Sign up failed')
-      }
-    })
+    this.props._login(this.state.username, this.state.password)
+		this.setState({
+			redirectTo: '/'
+		})
   };
 
   render() {

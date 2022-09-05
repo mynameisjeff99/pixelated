@@ -8,23 +8,18 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+//const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const dbConnection = require('./config/db');
 const passport = require('./passport');
 const authRoute = require('./routes/auth');
+const gameRoute = require('./routes/game');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 // ===== Middleware ====
-app.use(morgan('dev'));
-app.use(
-	bodyParser.urlencoded({
-		extended: false
-	})
-);
-
 app.use(
   cors({
     origin: 'http://localhost:3000',
@@ -33,7 +28,17 @@ app.use(
   })
 );
 
+app.use(morgan('dev'));
+
+//app.use(cookieParser());
+
+app.use(
+	bodyParser.urlencoded({
+		extended: false
+	})
+);
 app.use(bodyParser.json());
+
 app.use(
 	session({
 		secret: process.env.APP_SECRET || 'this is the default passphrase',
@@ -83,6 +88,7 @@ if (process.env.NODE_ENV === 'production') {
 
 /* Express app ROUTING */
 app.use('/auth', authRoute);
+app.use('/game', gameRoute);
 
 // ====== Error handler ====
 app.use(function(err, req, res, next) {
