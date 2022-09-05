@@ -11,10 +11,12 @@ class App extends Component {
         2015: '#955251', 2014: '#ad5e99'}, */
       canvasColor: "#f7caca", 
       brushColor: "#5f4b8b",
-      colored: []};
+      colored: [],
+      toRestore: false};
     //this.changeCanvasColor = this.changeCanvasColor.bind(this);
     this.colorSquare = this.colorSquare.bind(this);
     this.handleSave = this.handleSave.bind(this);
+    this.handleRestore = this.handleRestore.bind(this);
   }
 
   colorSquare(e) {
@@ -31,7 +33,24 @@ class App extends Component {
     })
   };
 
+  handleRestore(e) {
+    axios.get(`${process.env.REACT_APP_API_URI}game/restore-game/${this.props.user._id}`)
+    .then(response => {
+      console.log(response.data)
+      if (!!response.data.game_setting) {
+        console.log('Successfully restored the game')
+        this.setState({
+          toRestore: true,
+          colored: response.data.game_setting,
+        })
+      } else {
+        console.log("Error")
+      }
+    })
+  };
 
+
+  /*
   render() {
     let all_items =[];
     for (let i = 0; i < 16; i++) {
@@ -43,13 +62,28 @@ class App extends Component {
       }
       all_items.push(<div key={i} className='canvasRow row'> {items} </div>);
     }
-
+    */
+   
+  render() {
+    let all_items =[];
+    for (let i = 0; i < 16; i++) {
+      let items = []
+      for (let j = 0; j < 16; j++) {
+        let id= i.toString()+'_'+j.toString()
+        items.push(<div onMouseOver={this.colorSquare} style={{backgroundColor: this.state.toRestore ? 
+          (this.state.colored.includes(id) ? this.state.brushColor: this.state.canvasColor)
+          : this.state.canvasColor}}
+          id={id} key={j} className='canvasBox'/>)
+      }
+      all_items.push(<div key={i} className='canvasRow row'> {items} </div>);
+    }
     return (
       <div id='container' className='colFlex'>
         <div id='canvas' className='colFlex'>
           {all_items}
         </div>
-        <button onClick={this.handleSave}>Save</button>
+        <button onClick={this.handleSave}>Save this game</button>
+        <button onClick={this.handleRestore}>Restore previous Game</button>
       </div>
     )
   }
