@@ -5,26 +5,35 @@ if (process.env.NODE_ENV !== 'production') {
 }
 require('dotenv').config()
 
-const express = require('express')
-const bodyParser = require('body-parser')
-const morgan = require('morgan')
-const session = require('express-session')
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const dbConnection = require('./config/db');
-const passport = require('./passport')
-const authRoute = require('./routes/auth')
-const app = express()
-const PORT = process.env.PORT || 8000
+const passport = require('./passport');
+const authRoute = require('./routes/auth');
+const app = express();
+const PORT = process.env.PORT || 8000;
 
 // ===== Middleware ====
-app.use(morgan('dev'))
+app.use(morgan('dev'));
 app.use(
 	bodyParser.urlencoded({
 		extended: false
 	})
-)
+);
 
-app.use(bodyParser.json())
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
+
+app.use(bodyParser.json());
 app.use(
 	session({
 		secret: process.env.APP_SECRET || 'this is the default passphrase',
@@ -34,11 +43,11 @@ app.use(
 		resave: false,
 		saveUninitialized: false
 	})
-)
+);
 
 // ===== Passport ====
-app.use(passport.initialize())
-app.use(passport.session()) // will call the deserializeUser
+app.use(passport.initialize());
+app.use(passport.session()); // will call the deserializeUser
 
 // ===== testing middleware =====
 // app.use(function(req, res, next) {
@@ -69,23 +78,23 @@ if (process.env.NODE_ENV === 'production') {
 	app.use('/static', express.static(path.join(__dirname, '../build/static')))
 	app.get('/', (req, res) => {
 		res.sendFile(path.join(__dirname, '../build/'))
-	})
-}
+	});
+};
 
 /* Express app ROUTING */
-app.use('/auth', authRoute)
+app.use('/auth', authRoute);
 
 // ====== Error handler ====
 app.use(function(err, req, res, next) {
 	console.log('====== ERROR =======')
 	console.error(err.stack)
 	res.status(500)
-})
+});
 
 // ==== Starting Server =====
 app.listen(PORT, () => {
 	console.log(`App listening on PORT: ${PORT}`)
-})
+});
 
 
 

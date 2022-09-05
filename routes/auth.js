@@ -1,20 +1,12 @@
 //https://github.com/thechutrain/mern-passport
+require('dotenv').config()
+
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
 const passport = require('../passport')
 
-router.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }))
-
-router.get(
-	'/google/callback',
-	passport.authenticate('google', {
-		successRedirect: '/',
-		failureRedirect: '/login'
-	})
-)
-
-// this route is just used to get the user basic info
+// Get the user basic info
 router.get('/user', (req, res, next) => {
 	console.log('===== user!!======')
 	console.log(req.user)
@@ -25,6 +17,19 @@ router.get('/user', (req, res, next) => {
 	}
 })
 
+
+// Google
+router.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }))
+
+router.get(
+	'/google/callback',
+	passport.authenticate('google', {
+		successRedirect: process.env.CLIENT_ORIGIN_URL,
+		failureRedirect: `${process.env.CLIENT_ORIGIN_URL}login`
+	})
+)
+
+// Local
 router.post(
 	'/login',
 	function(req, res, next) {

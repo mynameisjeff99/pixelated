@@ -25,9 +25,9 @@ const RouteSwitch = () => {
   useEffect(() => {
 		getUser();
 	}, []);
-  */
 
   const [user,setLoginUser] = useState({})
+  */
 
   return (
     <BrowserRouter>

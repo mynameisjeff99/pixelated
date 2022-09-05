@@ -4,14 +4,14 @@ const GoogleStratgey = require('./googleStrategy')
 const User = require('../models/user')
 
 passport.serializeUser((user, done) => {
-	console.log('=== serialize ... called ===')
+	console.log('=== Serialize ... called ===')
 	console.log(user) // the whole raw user object!
 	console.log('---------')
 	done(null, { _id: user._id })
 })
 
 passport.deserializeUser((id, done) => {
-	console.log('DEserialize ... called')
+	console.log('Deserialize ... called')
 	User.findOne(
 		{ _id: id },
 		'firstName lastName photos local.username',
