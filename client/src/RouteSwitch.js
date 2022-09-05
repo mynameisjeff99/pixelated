@@ -9,30 +9,34 @@ import Navbar from "./components/Navigation";
 
 
 const RouteSwitch = () => {
+  /*
   const [user, setUser] = useState(null);
 
   const getUser = async () => {
     try {
-      const url = 'http://localhost:8000/auth/login/success';
+      const url = `${process.env.REACT_APP_API_URI}auth/login/success`;
       const { data } = await axios.get(url, { withCredentials: true });
       setUser(data.user._json);
     } catch (err) {
-      console.log(err);
+      console.log("Not logged in");
     }
   };
 
   useEffect(() => {
 		getUser();
 	}, []);
+  */
+
+  const [user,setLoginUser] = useState({})
 
   return (
     <BrowserRouter>
       <div>
-        <Navbar/>
+        <Navbar />
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-          <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </div>
     </BrowserRouter>

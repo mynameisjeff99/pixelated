@@ -1,41 +1,78 @@
-// https://www.youtube.com/watch?v=pdd04JzJrDw&t=99s
-const express = require("express");
-const router = express.Router();
-const passport = require("passport");
+//https://github.com/thechutrain/mern-passport
+const express = require('express')
+const router = express.Router()
+const User = require('../models/user')
+const passport = require('../passport')
 
-router.get("/login/success", (req, res) => {
-  if (req.user) {
-    res.status(200).json({
-      error: false,
-      message: "Successfully loged in",
-      user: req.user,
-    })
-  } else {
-    res.status(403).json({error: true, message: "Not Authorized"});
-  }
-});
-
-router.get("/login/failed", (req, res) => {
-  res.status(401).json({
-    error: true,
-    message: "Log in failure",
-  });
-});
+router.get('/google', passport.authenticate('google', { scope: ['email', 'profile'] }))
 
 router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: process.env.CLIENT_ORIGIN_URL,
-    failureRedirect: "/login/failed",
-  })
-);
+	'/google/callback',
+	passport.authenticate('google', {
+		successRedirect: '/',
+		failureRedirect: '/login'
+	})
+)
 
-router.get("/google", passport.authenticate("google", ["profile", "email"]))
+// this route is just used to get the user basic info
+router.get('/user', (req, res, next) => {
+	console.log('===== user!!======')
+	console.log(req.user)
+	if (req.user) {
+		return res.json({ user: req.user })
+	} else {
+		return res.json({ user: null })
+	}
+})
 
-router.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect(process.env.CLIENT_ORIGIN_URL);
-});
+router.post(
+	'/login',
+	function(req, res, next) {
+		console.log(req.body)
+		console.log('================')
+		next()
+	},
+	passport.authenticate('local'),
+	(req, res) => {
+		console.log('POST to /login')
+		const user = JSON.parse(JSON.stringify(req.user)) // hack
+		const cleanUser = Object.assign({}, user)
+		if (cleanUser.local) {
+			console.log(`Deleting ${cleanUser.local.password}`)
+			delete cleanUser.local.password
+		}
+		res.json({ user: cleanUser })
+	}
+)
+
+router.post('/logout', (req, res) => {
+	if (req.user) {
+		req.session.destroy()
+		res.clearCookie('connect.sid') // clean up!
+		return res.json({ msg: 'logging you out' })
+	} else {
+		return res.json({ msg: 'no user to log out!' })
+	}
+})
+
+router.post('/signup', (req, res) => {
+	const { username, password } = req.body
+	// ADD VALIDATION
+	User.findOne({ 'local.username': username }, (err, userMatch) => {
+		if (userMatch) {
+			return res.json({
+				error: `Sorry, already a user with the username: ${username}`
+			})
+		}
+		const newUser = new User({
+			'local.username': username,
+			'local.password': password
+		})
+		newUser.save((err, savedUser) => {
+			if (err) return res.json(err)
+			return res.json(savedUser)
+		})
+	})
+})
 
 module.exports = router;
-
